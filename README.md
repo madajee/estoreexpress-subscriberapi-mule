@@ -1,4 +1,4 @@
-# e-store-express-mule
+# estoreexpress-subscriberapi-mule
 
 ### Overview
 Features: [register, login]
@@ -7,27 +7,23 @@ Features: [register, login]
 ![alt text](https://github.com/madajee/e-store-express-mule/blob/main/exchange-docs/e-store-express-mule-1.png?raw=true)
 
 ### Test
-curl --location 'http://localhost:8081/api/register' \
+curl --location 'http://localhost:8081/api/createuser' \
 --header 'Content-Type: application/json' \
 --data '{"username":"test1","password":"test","name":"testname"}'
 Accepted Response: 
 {"username":"test1","message":"success","name":"testname"}
 
-curl --location 'http://localhost:8081/api/login' \
+curl --location 'http://localhost:8081/api/updateuser' \
 --header 'Content-Type: application/json' \
---data '{"username":"test1","password":"test"}'
+--data '{"username":"test1","password":"test", "lastlogin": "2016-01-01"}'
 Accepted Response: 
-{"username":"test1","message":"success","name":"testname"}
-Accepted Response: 
-{"username":"test1","password":"test","oauth2token":{"access_token":"MpSXI2oX5eamog_YETjL99g3v52Fle-ODgMp5aQUDpI1RZAxzhenv3KiRatDRHG_JYxkHLFN6cUKMmzMhwZ5Jw","token_type":"Bearer","expires_in":86400}}
+{"username":"test1","password":"test", "lastlogin": "2016-01-01"}
 
-curl --location 'http://localhost:8081/api/getuser' \
---header 'Authorization: Bearer MpSXI2oX5eamog_YETjL99g3v52Fle-ODgMp5aQUDpI1RZAxzhenv3KiRatDRHG_JYxkHLFN6cUKMmzMhwZ5Jw'
+curl --location 'http://localhost:8081/api/readuser'
 Accepted Response: 
 {"message":"success","loggedin":"test1"}
 
 curl --location 'http://localhost:8081/api/deleteuser' \
---header 'Authorization: Bearer MpSXI2oX5eamog_YETjL99g3v52Fle-ODgMp5aQUDpI1RZAxzhenv3KiRatDRHG_JYxkHLFN6cUKMmzMhwZ5Jw' \
 --header 'Content-Type: application/json' \
 --data '{"username":"test1","name":"testname"}'
 Accepted Response: 
