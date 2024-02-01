@@ -4,26 +4,7 @@ types:
     type: string
   password:
     type: string
-  oauth2token: |
-    {
-      "type": "object",
-      "$schema": "http://json-schema.org/draft-03/schema",
-      "id": "http://jsonschema.net",
-      "required": true,
-      "properties": {
-        "username": {
-          "type": "string",
-          "required": true,
-          "minLength": 4,
-          "maxLength": 6
-        },
-        "name": {
-          "type": "string",
-          "required": true
-        }
-      }
-    }
-  regsiter: |
+  createuser: |
     {
       "type": "object",
       "$schema": "http://json-schema.org/draft-03/schema",
@@ -46,7 +27,7 @@ types:
         }
       }
     }
-  login: |
+  readuser: |
     {
       "type": "object",
       "$schema": "http://json-schema.org/draft-03/schema",
@@ -60,6 +41,33 @@ types:
           "maxLength": 6
         },
         "password": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  updateuser: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "minLength": 4,
+          "maxLength": 6
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        },
+        "lastlogin": {
           "type": "string",
           "required": true
         }

@@ -24,3 +24,71 @@ uses:
             examples:
               example1: !include examples/test1.raml
               example2: !include examples/test2.raml
+/createuser:
+  post:
+    description: createuser
+    body:
+        application/json:
+          type:  apiLib.createuser
+          example: |
+            {
+              "username": "test1",
+              "password": "test",
+              "name": "test1"
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/createuser/test1.raml
+              example2: !include examples/createuser/test2.raml
+/updateuser:
+  post:
+    description: updateuser
+    body:
+        application/json:
+          type:  apiLib.updateuser
+          example: |
+            {
+              "username": "test1",
+              "password": "test",
+              "lastlogin": "2016-01-01"
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/updateuser/test1.raml
+/deleteuser:
+  post:
+    description: deleteuser
+    body:
+        application/json:
+          type:  apiLib.deleteuser
+          example: |
+            {
+              "username": "test1",
+              "name": "test1"
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/deleteuser/test1.raml
+/readuser:
+  get:
+    description: readuser
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/readuser/test1.raml
+
