@@ -1,0 +1,26 @@
+#%RAML 1.0
+title: estoreexpress-subscriberapi-mule
+
+uses:
+  apiLib: datatypes/apilib.raml
+
+/ping:
+  get:
+    description: ping
+    queryParameters:
+      username:
+        description: username
+        type: apiLib.username
+        required: false
+      password:
+        description: password
+        type: apiLib.password
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/test1.raml
+              example2: !include examples/test2.raml

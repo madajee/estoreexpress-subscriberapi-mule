@@ -1,0 +1,86 @@
+#%RAML 1.0 Library
+types:
+  username:
+    type: string
+  password:
+    type: string
+  oauth2token: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "minLength": 4,
+          "maxLength": 6
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  regsiter: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "minLength": 4,
+          "maxLength": 6
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  login: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "minLength": 4,
+          "maxLength": 6
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  deleteuser: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "minLength": 4,
+          "maxLength": 6
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
