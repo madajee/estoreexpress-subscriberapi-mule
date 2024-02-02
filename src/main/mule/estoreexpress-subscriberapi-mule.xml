@@ -106,8 +106,8 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\readuser:estoreexpress-subscriberapi-mule-config">
-        <flow-ref doc:name="readusers" doc:id="7e83c515-a9fa-4f9b-a08f-85ff3a4b9219" name="readusers"/>
-        <logger level="INFO" doc:name="Logger" doc:id="1ee5fcf6-f3a2-48e6-af8e-c270b2877400" message="#[output application/json --- payload]"/>
+        <flow-ref doc:name="readusers" doc:id="7e83c515-a9fa-4f9b-a08f-85ff3a4b9219" name="readusers" target="usersdbresponse"/>
+        <logger level="INFO" doc:name="Logger" doc:id="1ee5fcf6-f3a2-48e6-af8e-c270b2877400" message="#[output application/json --- vars.usersdbresponse]"/>
 		<ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -121,48 +121,48 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\createuser:application\json:estoreexpress-subscriberapi-mule-config">
-        <flow-ref doc:name="insertuser" doc:id="af92114f-5847-45c9-8c22-b4aeac52da71" name="insertuser"/>
-        <logger level="INFO" doc:name="Logger" doc:id="cf56399b-d73f-46d1-ad97-6d752aaccd4c" message="#[output application/json --- payload]"/>
+        <flow-ref doc:name="insertuser" doc:id="af92114f-5847-45c9-8c22-b4aeac52da71" name="insertuser" target="usersdbresponse"/>
+        <logger level="INFO" doc:name="Logger" doc:id="cf56399b-d73f-46d1-ad97-6d752aaccd4c" message="#[output application/json --- vars.usersdbresponse]"/>
         <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  username: "test1",
+  username: payload.username,
   message: "success",
-  name: "test1"
+  name: payload.name
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="post:\deleteuser:application\json:estoreexpress-subscriberapi-mule-config">
-        <flow-ref doc:name="deleteuser" doc:id="fe9a18c9-644a-4cb8-ab74-eb4643115a1f" name="deleteuser"/>
-        <logger level="INFO" doc:name="Logger" doc:id="08cfa47c-c507-43df-b849-344febb297f9" message="#[output application/json --- payload]"/>
+        <flow-ref doc:name="deleteuser" doc:id="fe9a18c9-644a-4cb8-ab74-eb4643115a1f" name="deleteuser" target="usersdbresponse"/>
+        <logger level="INFO" doc:name="Logger" doc:id="08cfa47c-c507-43df-b849-344febb297f9" message="#[output application/json --- vars.usersdbresponse]"/>
         <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  username: "test1",
-  name: "test1"
+  username: payload.username,
+  name: payload.name
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
     <flow name="post:\updateuser:application\json:estoreexpress-subscriberapi-mule-config">
-        <flow-ref doc:name="updateuser" doc:id="a0106dd4-f1f0-4ed2-af0b-f209be17106f" name="updateuser"/>
-        <logger level="INFO" doc:name="Logger" doc:id="4479891e-3f3c-4607-9cd1-1bd42ff2604d" message="#[output application/json --- payload]"/>
+        <flow-ref doc:name="updateuser" doc:id="a0106dd4-f1f0-4ed2-af0b-f209be17106f" name="updateuser" target="usersdbresponse"/>
+        <logger level="INFO" doc:name="Logger" doc:id="4479891e-3f3c-4607-9cd1-1bd42ff2604d" message="#[output application/json --- vars.usersdbresponse]"/>
         <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  username: "test1",
-  password: "test",
-  lastlogin: "2016-01-01"
+  username: payload.username,
+  password: payload.password,
+  lastlogin: payload.lastlogin
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
