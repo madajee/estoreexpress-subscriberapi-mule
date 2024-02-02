@@ -10,7 +10,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<apikit:config name="estoreexpress-subscriberapi-mule-config" api="estoreexpress-subscriberapi-mule.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<configuration-properties doc:name="Configuration properties" doc:id="0cd1bb9a-900c-4918-bbe8-a0bbdaa682a3" file="config/config-${env}.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="73e20f7c-b3d2-49b9-bb4e-86717ad52a71" file="config/queries-${env}.properties" />
 	<global-property doc:name="Global Property" doc:id="e27fdab1-9092-4712-8d72-6b0a0e23bf7d" name="env" value="local" />
+	<global-property doc:name="Global Property" doc:id="ecc33338-7090-4cfe-b435-c5bbe0387259" name="encryption.key" value="123" />
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d610bc8f-f6a5-4f88-ba4b-7a7eca175532" file="config/config-${env}.yaml" key="${encryption.key}" >
 		<secure-properties:encrypt algorithm="Blowfish" />
 	</secure-properties:config>

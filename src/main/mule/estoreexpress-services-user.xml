@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="readusers" doc:id="072fc80a-cb17-4803-94cc-b952ab8b2c32">
+		<db:select doc:name="Select" doc:id="545fe012-ef58-40f7-8e66-98fcf8d933f3" config-ref="Database_Config">
+			<db:sql ><![CDATA[${user.select}]]></db:sql>
+		</db:select>
+	</sub-flow>
+	<sub-flow name="updateuser" doc:id="349da126-c508-4d2d-ad2e-5d8cefabe83d" >
+		<db:update doc:name="Update" doc:id="08063df2-45e1-4274-a800-233e44872493" config-ref="Database_Config">
+			<db:sql ><![CDATA[${user.update}]]></db:sql>
+		</db:update>
+	</sub-flow>
+	<sub-flow name="insertuser" doc:id="0497dd54-80fd-49d0-8cab-9d1477bd43ad" >
+		<db:insert doc:name="Insert" doc:id="e926b96e-8467-4746-9035-875a0e29a54d" config-ref="Database_Config">
+			<db:sql ><![CDATA[${user.insert}]]></db:sql>
+		</db:insert>
+	</sub-flow>
+	<sub-flow name="deleteuser" doc:id="bb841539-520a-44c5-8b04-8fae0364b7f3" >
+		<db:delete doc:name="Delete" doc:id="47023073-3c9d-4556-845b-781a038c6d92" config-ref="Database_Config">
+			<db:sql ><![CDATA[${user.delete}]]></db:sql>
+		</db:delete>
+	</sub-flow>	
+</mule>
