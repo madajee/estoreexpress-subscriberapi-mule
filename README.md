@@ -4,7 +4,7 @@
 Features: [register, login]
 
 ### view
-![alt text](https://github.com/madajee/e-store-express-mule/blob/main/exchange-docs/e-store-express-mule-1.png?raw=true)
+![alt text](https://github.com/madajee/estoreexpress-subscriberapi-mule/blob/main/exchange-docs/estoreexpress-subscriberapi-mule.png?raw=true)
 
 ### Test
 curl --location 'http://localhost:8081/api/createuser' \
