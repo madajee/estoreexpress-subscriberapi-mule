@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<flow name="subscriber-userqFlow" doc:id="fc66c6f1-ae84-4a00-ae8a-a81555e37a9e" >
+		<vm:listener doc:name="Listener" doc:id="2f686f81-7191-42ab-89f4-24c12ea9ecb2" config-ref="VM_Config" queueName="userq"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e30c496f-9051-44de-b277-d178991da436" message="#[output application/json --- payload]"/>
+	</flow>
+	<sub-flow name="estoreexpresstest-userq-publishvmsubFlow" doc:id="3983f745-2971-4e44-8d71-66faec21a878" >
+		<vm:publish queueName="userq" doc:name="Publish" doc:id="58dbdfe9-c7b9-4d6d-bb48-bc59de8079e3" config-ref="VM_Config"/>
+	</sub-flow>
+</mule>

@@ -91,4 +91,26 @@ uses:
             type: object
             examples:
               example1: !include examples/readuser/test1.raml
+/testuserq:
+  post:
+    description: testuserq
+    body:
+        application/json:
+          type:  apiLib.userq
+          example: |
+            {
+              "msgtype": "register",
+              "message": {
+                "username": "test1",
+                "password": "test",
+                "name": "testname"
+              }
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/testuserq/register.raml
 

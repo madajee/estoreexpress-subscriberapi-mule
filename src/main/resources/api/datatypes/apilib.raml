@@ -92,3 +92,38 @@ types:
         }
       }
     }
+  userq: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "msgtype": {
+          "type": "string",
+          "required": true
+        },
+        "message": {
+          "type": "object",
+          "$schema": "http://json-schema.org/draft-03/schema",
+          "id": "http://jsonschema.net",
+          "required": true,
+          "properties": {
+            "username": {
+              "type": "string",
+              "required": true,
+              "minLength": 4,
+              "maxLength": 6
+            },
+            "password": {
+              "type": "string",
+              "required": true
+            },
+            "name": {
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      }
+    }
