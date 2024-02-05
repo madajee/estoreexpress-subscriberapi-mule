@@ -18,10 +18,25 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<logger level="INFO" doc:name="Logger" doc:id="4a61061e-ed56-40c9-80c9-3282024d82db" message="#[output application/json --- payload]"/>
 				<flow-ref doc:name="insertuser" doc:id="5283b560-d88b-42cb-b5c6-d3ce6a5ae07e" name="insertuser" target="usersdbresponse"/>
 				<ee:transform doc:name="Transform Message" doc:id="f200e32b-7e88-462b-a48c-2c448510325a">
-			<ee:message>
-				<ee:set-payload resource="dwl/registerresponse.dwl" />
-			</ee:message>
-		</ee:transform>
+					<ee:message>
+						<ee:set-payload resource="dwl/registerresponse.dwl" />
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#[payload.msgtype == 'login']">
+				<set-variable value='#[payload.message.lastlogin as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}]' doc:name="Set Variable" doc:id="da53a278-5d4c-4edf-bc69-a6d77bc6aec7" variableName="lastlogin"/>
+				<ee:transform doc:name="Transform Message" doc:id="d41594ec-7f6d-4ead-9066-ab41f1c732ab" >
+				  <ee:message >
+				    <ee:set-payload resource="dwl/updateuser.dwl" />
+				  </ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="b47e9bc6-0a06-497e-a823-8d70edf7042f" message="#[output application/json --- payload]"/>
+				<flow-ref doc:name="updateuser" doc:id="5f6c49f4-bad9-44c9-8580-2fb9734bc9c0" name="updateuser" target="usersdbresponse"/>
+				<ee:transform doc:name="Transform Message" doc:id="d96762b2-129f-4bb1-bf42-067e12c34448">
+					<ee:message>
+						<ee:set-payload resource="dwl/loginresponse.dwl" />
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
 				<logger level="INFO" doc:name="Logger" doc:id="c282a828-07ba-4841-bd30-3e254b42eeea" message="#[output application/json --- payload]"/>

@@ -152,7 +152,8 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\updateuser:application\json:estoreexpress-subscriberapi-mule-config">
-        <flow-ref doc:name="updateuser" doc:id="a0106dd4-f1f0-4ed2-af0b-f209be17106f" name="updateuser" target="usersdbresponse" />
+		<set-variable value='#[payload.lastlogin as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}]' doc:name="Set Variable" doc:id="4a5728ab-db47-46af-864a-69faef93a3bc" variableName="lastlogin"/>
+		<flow-ref doc:name="updateuser" doc:id="a0106dd4-f1f0-4ed2-af0b-f209be17106f" name="updateuser" target="usersdbresponse" />
         <logger level="INFO" doc:name="Logger" doc:id="4479891e-3f3c-4607-9cd1-1bd42ff2604d" message="#[output application/json --- vars.usersdbresponse]" />
         <ee:transform doc:name="Transform Message">
             <ee:message>
