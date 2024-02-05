@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="subscriber-userqFlow" doc:id="fc66c6f1-ae84-4a00-ae8a-a81555e37a9e" >
 		<vm:listener doc:name="Listener" doc:id="2f686f81-7191-42ab-89f4-24c12ea9ecb2" config-ref="VM_Config" queueName="userq"/>
 		<logger level="INFO" doc:name="Logger" doc:id="e30c496f-9051-44de-b277-d178991da436" message="#[output application/json --- payload]"/>
+		<choice doc:name="Choice" doc:id="2f846240-5519-4a7a-a0d4-9d73f39fc609" >
+			<when expression="#[payload.msgtype == 'register']">
+				<ee:transform doc:name="Transform Message" doc:id="9de4ac0d-bd12-4f06-b715-9aeee80fcc92" >
+				  <ee:message >
+				    <ee:set-payload resource="dwl/insertuser.dwl" />
+				  </ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="4a61061e-ed56-40c9-80c9-3282024d82db" message="#[output application/json --- payload]"/>
+				<flow-ref doc:name="insertuser" doc:id="5283b560-d88b-42cb-b5c6-d3ce6a5ae07e" name="insertuser" target="usersdbresponse"/>
+				<ee:transform doc:name="Transform Message" doc:id="f200e32b-7e88-462b-a48c-2c448510325a">
+			<ee:message>
+				<ee:set-payload resource="dwl/registerresponse.dwl" />
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="c282a828-07ba-4841-bd30-3e254b42eeea" message="#[output application/json --- payload]"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="4297bea4-4de0-43aa-b1c8-442e2a76975d" message="#[output application/json --- payload]"/>
 	</flow>
 	<sub-flow name="estoreexpresstest-userq-publishvmsubFlow" doc:id="3983f745-2971-4e44-8d71-66faec21a878" >
 		<vm:publish queueName="userq" doc:name="Publish" doc:id="58dbdfe9-c7b9-4d6d-bb48-bc59de8079e3" config-ref="VM_Config"/>
