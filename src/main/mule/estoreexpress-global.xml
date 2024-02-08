@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <http:listener-connection host="${http.listener.host}" port="${http.listener.port}" />
     </http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="c7fa1728-f470-4c68-8f64-9f907f4113ce" >
-		<db:generic-connection url="jdbc:postgresql://localhost:5432/estoreexpress" driverClassName="org.postgresql.Driver" user="mulejohn" password="${db.pwd}"/>
+		<db:generic-connection url="jdbc:postgresql://localhost:5432/estoreexpressmule" driverClassName="org.postgresql.Driver" user="mulejohn" password="${db.pwd}"/>
 	</db:config>
 		<vm:config name="VM_Config" doc:name="VM Config" doc:id="08b4ec90-7851-43fb-973a-77d49d9b0256" >
 		<vm:queues >
