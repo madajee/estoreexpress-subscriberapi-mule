@@ -154,7 +154,16 @@ output application/json
     <flow name="post:\updateuser:application\json:estoreexpress-subscriberapi-mule-config">
 		<set-variable value='#[payload.lastlogin as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}]' doc:name="Set Variable" doc:id="4a5728ab-db47-46af-864a-69faef93a3bc" variableName="lastlogin"/>
 		<flow-ref doc:name="updateuser" doc:id="a0106dd4-f1f0-4ed2-af0b-f209be17106f" name="updateuser" target="usersdbresponse" />
-        <logger level="INFO" doc:name="Logger" doc:id="4479891e-3f3c-4607-9cd1-1bd42ff2604d" message="#[output application/json --- vars.usersdbresponse]" />
+        <choice doc:name="Choice" doc:id="f79684f5-54bb-4ff1-b211-964b1876ae9a" >
+			<when expression="#[vars.usersdbresponse.affectedRows == 0]">
+				<logger level="INFO" doc:name="Logger" doc:id="6d932687-32c2-45c3-bacb-3a218132d738" message='#[output application/json --- {"message": "user doesnt exits"}]'/>
+				<raise-error doc:name="Raise error" doc:id="0957b39b-5ca2-4d06-92af-972c72a5b074" type="APPERROR:NO_SUCH_CLIENT"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="51b81ff6-fed5-4363-9ccc-10ff02fd7533" message='#[output application/json --- {"message": "user exits"}]'/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="4479891e-3f3c-4607-9cd1-1bd42ff2604d" message="#[output application/json --- vars.usersdbresponse]" />
         <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0

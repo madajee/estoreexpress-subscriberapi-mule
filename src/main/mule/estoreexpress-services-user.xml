@@ -14,7 +14,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<sub-flow name="updateuser" doc:id="349da126-c508-4d2d-ad2e-5d8cefabe83d" >
 
 		<db:update doc:name="Update" doc:id="4c2a2e5d-209e-468c-950b-24014a303ce2" config-ref="Database_Config">
-		<db:sql><![CDATA[${user.update}]]></db:sql>
+		<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:ESTOREAPI" />
+			<db:sql><![CDATA[${user.update}]]></db:sql>
 			<db:input-parameters><![CDATA[#[{'username': payload.username, lastlogin: vars.lastlogin}]]]></db:input-parameters>
 		</db:update>
 	</sub-flow>

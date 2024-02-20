@@ -26,6 +26,8 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 		<vm:config name="VM_Config" doc:name="VM Config" doc:id="08b4ec90-7851-43fb-973a-77d49d9b0256" >
 		<vm:queues >
 			<vm:queue queueName="userq" />
+			<vm:queue queueName="errorq" />
 		</vm:queues>
 	</vm:config>
+	<configuration doc:name="Configuration" doc:id="72b70f13-3221-4ccd-9ac6-41e657994e49" defaultErrorHandler-ref="commonErrorHandler" />
 </mule>
