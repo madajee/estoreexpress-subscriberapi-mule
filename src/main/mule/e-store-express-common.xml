@@ -38,6 +38,6 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	</sub-flow>
 	<flow name="vm-errorq-listeningFlow" >
 		<vm:listener queueName="errorq" doc:name="Listener" config-ref="VM_Config"/>
-		<logger level="INFO" doc:name="Logger" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" message="#[output application/json --- payload]"/>
 	</flow>
 </mule>

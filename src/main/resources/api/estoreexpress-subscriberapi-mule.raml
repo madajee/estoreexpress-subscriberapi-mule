@@ -113,4 +113,18 @@ uses:
             type: object
             examples:
               example1: !include examples/testuserq/register.raml
+/testerrorq:
+  post:
+    description: testerrorq
+    body:
+        application/json:
+          example: |
+            {"transactionId":"9e56521b.ec30.4709.b477.c743f3854063","msgtype":"register","transactionstatus":"Failed","error":{"description":"The client with ID: test1 is already registered","type":"APPERROR:CLIENT_ALREADY_EXISTS","cause":"The client with ID: test1 is already registered"}}
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/testerrorq/errorcode-0001.raml
 

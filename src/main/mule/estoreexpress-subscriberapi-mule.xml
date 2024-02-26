@@ -197,4 +197,28 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
+    <flow name="post:\testerrorq:application\json:estoreexpress-subscriberapi-mule-config">
+        <ee:transform doc:name="Transform Message" doc:id="fe9b766e-716b-4e14-b19e-4c1ad95d7e4d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload ++ {"errorcode": "0001"}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<async doc:name="Async" doc:id="4913317c-541f-4fa2-a1f1-d742f6e36245" >
+			<flow-ref doc:name="estoreexpresstest-errorq-publishvmsubFlow" doc:id="064e0ce9-2ca3-4a38-a2ae-a95c0fad86ee" name="publish-errorq-subflow" />
+		</async>
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "errorcode": "0001",
+  "errorpayload": {"transactionId":"9e56521b.ec30.4709.b477.c743f3854063","msgtype":"register","transactionstatus":"Failed","error":{"description":"The client with ID: test1 is already registered","type":"APPERROR:CLIENT_ALREADY_EXISTS","cause":"The client with ID: test1 is already registered"}}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
 </mule>
