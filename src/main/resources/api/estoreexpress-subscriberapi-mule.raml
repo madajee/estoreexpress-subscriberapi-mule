@@ -127,4 +127,59 @@ uses:
             type: object
             examples:
               example1: !include examples/testerrorq/errorcode-0001.raml
+/readproduct:
+  get:
+    description: readproduct
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/readproduct/example.raml
+/createproduct:
+  post:
+    description: createproduct
+    body:
+        application/json:
+          type:  apiLib.createproduct
+          example: |
+            {
+              "id": "2",
+              "title": "iPhone X",
+              "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+              "price": 899,
+              "discountPercentage": 12.96,
+              "rating": 4.69,
+              "stock": 94,
+              "brand": "Apple",
+              "category": "smartphones",
+              "thumbnail": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"
+              
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/createproduct/example.raml
+/deleteproduct:
+  post:
+    description: deleteproduct
+    body:
+        application/json:
+          type:  apiLib.deleteproduct
+          example: |
+            {
+              "id": "1",
+              "title": "iPhone X"
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/deleteproduct/example.raml
 

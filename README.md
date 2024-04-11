@@ -30,3 +30,5 @@ curl --location 'http://localhost:8081/api/testuserq' \
 curl --location 'http://localhost:8081/api/testuserq' \
 --header 'Content-Type: application/json' \
 --data '{"msgtype":"login","message":{"username":"john","password":"test","lastlogin":"2017-01-01"}}'
+
+curl --location 'http://localhost:8081/api/readproduct'

@@ -221,4 +221,66 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
+   <flow name="get:\readproduct:estoreexpress-subscriberapi-mule-config">
+		<flow-ref doc:name="readproducts" doc:id="6c3a0aff-3103-44bd-9b43-cd3ab1ebaf1b" name="readproducts" target="productsdbresponse" />
+        <logger level="INFO" doc:name="Logger" doc:id="e23f8ada-f759-4816-9b58-5cf7e331bbbe" message="#[output application/json --- vars.productsdbresponse]" />
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: 1,
+  title: "iPhone 9",
+  description: "An apple mobile which is nothing like apple",
+  price: 549,
+  discountPercentage: 12.96,
+  rating: 4.69,
+  stock: 94,
+  brand: "Apple",
+  category: "smartphones",
+  thumbnail: "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\createproduct:application\json:estoreexpress-subscriberapi-mule-config">
+		<flow-ref doc:name="createproducts" doc:id="ffb53d23-071d-4e74-b777-54d775393dbc" name="insertproduct" target="productsdbresponse" />
+        <logger level="INFO" doc:name="Logger" doc:id="ec899dca-e732-402a-b0c7-021016e0cfde" message="#[output application/json --- vars.productsdbresponse]" /> 
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "id": "2",
+  "title": "iPhone X",
+  "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+  "price": 899,
+  "discountPercentage": 12.96,
+  "rating": 4.69,
+  "stock": 94,
+  "brand": "Apple",
+  "category": "smartphones",
+  "thumbnail": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"
+  
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+   <flow name="post:\deleteproduct:application\json:estoreexpress-subscriberapi-mule-config">
+   		<flow-ref doc:name="deleteproducts" doc:id="03290b8b-4c9e-4d32-a1d7-903d8a57d7ec" name="deleteproduct" target="productsdbresponse" />
+        <logger level="INFO" doc:name="Logger" doc:id="c9faf504-4de2-43ab-8311-d35e46764a0b" message="#[output application/json --- vars.productsdbresponse]" /> 
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  username: payload.id,
+  name: payload.title
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow> 
 </mule>

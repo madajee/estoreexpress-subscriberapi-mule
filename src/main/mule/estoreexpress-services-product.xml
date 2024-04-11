@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="readproducts" doc:id="8c199619-8a73-429a-b53b-3d2c4aa96900">
+		<db:select doc:name="Select" doc:id="93e62de7-6924-44f9-9ed2-9cc40d9468d9" config-ref="Database_Config">
+			<db:sql ><![CDATA[${product.select}]]></db:sql>
+		</db:select>
+	</sub-flow>
+	<sub-flow name="insertproduct" doc:id="53010a99-7f72-4829-9c79-7bb16417780f" >
+		<db:insert doc:name="Insert" doc:id="b8c54fc5-0199-428c-aa6f-9dd0cd9ce260" config-ref="Database_Config">
+			<db:sql ><![CDATA[${product.insert}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'title': payload.title, 'description': payload.description, 'price': payload.price, 'discountPercentage': payload.discountPercentage, 'rating': payload.rating, 'stock': payload.stock, 'brand': payload.brand, 'category': payload.category, 'thumbnail': payload.thumbnail, "createdon": now() as String {format: "y-MM-dd"}, "updated_on": now() as String {format: "y-MM-dd"}}]]]></db:input-parameters>
+		</db:insert>
+	</sub-flow>
+	<sub-flow name="deleteproduct" doc:id="bd6f6d7f-1dd4-4bea-8d77-45291021fcce" >
+		<db:delete doc:name="Delete" doc:id="d35eb395-a918-414b-9143-bc1ffb843b34" config-ref="Database_Config">
+			<db:sql ><![CDATA[${product.delete}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'id': payload.id}]]]></db:input-parameters>
+		</db:delete>
+	</sub-flow>	
+</mule>

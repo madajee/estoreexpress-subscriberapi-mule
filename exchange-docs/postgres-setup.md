@@ -29,3 +29,15 @@ DELETE from users where username = 'user103';
 
 DROP DATABASE estoreexpressmule;
 \l
+
+CREATE TABLE errors (id serial PRIMARY KEY, errorcode VARCHAR(50) UNIQUE NOT NULL, errortype VARCHAR(50), errormessage VARCHAR (1000) NOT NULL, msgtype VARCHAR(50), created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NUL);
+
+INSERT INTO errors(errorcode, errortype, errormessage, created_on, updated_on) VALUES('0001', 'APPERROR:CLIENT_ALREADY_EXISTS', 'The client with ID: test1 is already registered','register', '2024-02-28', '2024-02-28');
+
+CREATE TABLE products (id serial PRIMARY KEY, title VARCHAR(50) UNIQUE NOT NULL, description VARCHAR(250), price DECIMAL NOT NULL, discountPercentage DECIMAL, rating INTEGER, stock INTEGER,  brand VARCHAR(50), category VARCHAR(50), thumbnail VARCHAR(250), created_on TIMESTAMP NOT NULL, updated_on TIMESTAMP NOT NULL);
+
+INSERT INTO products (title, description, price, discountPercentage, rating, stock, brand, category, thumbnail, created_on, updated_on) VALUES ('iPhone 9', 'An apple mobile which is nothing like apple', 549, 12.96, 4.69, 94, 'Apple', 'smartphones', 'https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg', '2024-02-28', '2024-02-28');
+
+select title, description, price, discountPercentage, rating, stock, brand, category, thumbnail, created_on, updated_on from products;
+
+DROP TABLE errors;

@@ -131,3 +131,61 @@ types:
         }
       }
     }
+  createproduct: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": true
+        },
+        "price": {
+          "type": "number",
+          "required": true
+        },
+        "discountPercentage": {
+          "type": "number",
+          "required": true
+        },
+        "rating": {
+          "type": "number",
+          "required": true
+        },
+        "stock": {
+          "type": "number",
+          "required": true
+        },
+        "brand": {
+          "type": "string",
+          "required": true
+        },
+        "category": {
+          "type": "string",
+          "required": true
+        },
+        "thumbnail": {
+          "type": "string",
+          "required": true
+        }       
+      }
+    }
+  deleteproduct: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
