@@ -189,3 +189,48 @@ types:
         }
       }
     }
+  updateproduct: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "id": "http://jsonschema.net",
+      "required": true,
+      "properties": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "price": {
+          "type": "number",
+          "required": false
+        },
+        "discountPercentage": {
+          "type": "number",
+          "required": false
+        },
+        "rating": {
+          "type": "number",
+          "required": false
+        },
+        "stock": {
+          "type": "number",
+          "required": false
+        },
+        "brand": {
+          "type": "string",
+          "required": false
+        },
+        "category": {
+          "type": "string",
+          "required": false
+        },
+        "thumbnail": {
+          "type": "string",
+          "required": false
+        }       
+      }
+    }

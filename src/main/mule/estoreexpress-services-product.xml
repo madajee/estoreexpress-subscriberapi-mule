@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<sub-flow name="insertproduct" doc:id="53010a99-7f72-4829-9c79-7bb16417780f" >
 		<db:insert doc:name="Insert" doc:id="b8c54fc5-0199-428c-aa6f-9dd0cd9ce260" config-ref="Database_Config">
 			<db:sql ><![CDATA[${product.insert}]]></db:sql>
-			<db:input-parameters ><![CDATA[#[{'title': payload.title, 'description': payload.description, 'price': payload.price, 'discountPercentage': payload.discountPercentage, 'rating': payload.rating, 'stock': payload.stock, 'brand': payload.brand, 'category': payload.category, 'thumbnail': payload.thumbnail, "createdon": now() as String {format: "y-MM-dd"}, "updated_on": now() as String {format: "y-MM-dd"}}]]]></db:input-parameters>
+			<db:input-parameters ><![CDATA[#[{'title': payload.title, 'description': payload.description, 'price': payload.price, 'discountPercentage': payload.discountPercentage, 'rating': payload.rating, 'stock': payload.stock, 'brand': payload.brand, 'category': payload.category, 'thumbnail': payload.thumbnail, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
 		</db:insert>
 	</sub-flow>
 	<sub-flow name="deleteproduct" doc:id="bd6f6d7f-1dd4-4bea-8d77-45291021fcce" >
@@ -22,5 +22,18 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<db:sql ><![CDATA[${product.delete}]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{'id': payload.id}]]]></db:input-parameters>
 		</db:delete>
-	</sub-flow>	
+	</sub-flow>
+	<sub-flow name="updateproduct" doc:id="6bbf870d-4aee-4ccd-8870-f3740dfb1034" >
+		<db:update doc:name="Update" doc:id="9336bf24-9a41-4353-804c-c63080024992" config-ref="Database_Config">
+		<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:ESTOREAPI" />
+			<db:sql><![CDATA[${product.update}]]></db:sql>
+			<db:input-parameters><![CDATA[#[{'title': payload.title, 'brand': payload.brand, 'rating': vars.readproductbytitle[0].rating, updated_on: vars.updated_on}]]]></db:input-parameters>
+		</db:update>
+	</sub-flow>
+	<sub-flow name="readproductbytitle" doc:id="bf93d8d6-7b95-4f62-ba1a-bfc5ecae88b0">
+		<db:select doc:name="Select" doc:id="a517fb3e-3057-45a1-a82d-15f68c4fa010" config-ref="Database_Config">
+			<db:sql ><![CDATA[${product.selectbytitle}]]></db:sql>
+			<db:input-parameters><![CDATA[#[{'title': payload.title}]]]></db:input-parameters>
+		</db:select>
+	</sub-flow>
 </mule>

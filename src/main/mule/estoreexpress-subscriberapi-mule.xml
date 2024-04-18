@@ -245,6 +245,20 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\createproduct:application\json:estoreexpress-subscriberapi-mule-config">
+		<ee:transform doc:name="auditfields" doc:id="98bedc63-ef6b-4f69-9b7c-62f1ee8ec55d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="auditfield" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	created_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"},
+	updated_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="c9602de4-3826-4d1b-9285-7ad28edee65f" message="#[output application/json --- vars.auditfield]"/>
 		<flow-ref doc:name="createproducts" doc:id="ffb53d23-071d-4e74-b777-54d775393dbc" name="insertproduct" target="productsdbresponse" />
         <logger level="INFO" doc:name="Logger" doc:id="ec899dca-e732-402a-b0c7-021016e0cfde" message="#[output application/json --- vars.productsdbresponse]" /> 
         <ee:transform doc:name="Transform Message">
@@ -279,6 +293,41 @@ output application/json
 {
   username: payload.id,
   name: payload.title
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+   <flow name="post:\updateproduct:application\json:estoreexpress-subscriberapi-mule-config"> 
+       <set-variable value='#[now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}]' doc:name="Set Variable" doc:id="9320d568-11f0-41fd-939f-60e6bad99172" variableName="updated_on"/>
+       <flow-ref doc:name="readproductbytitle" doc:id="a24330cf-37b3-41a7-98e8-e2ef45766087" name="readproductbytitle" target="readproductbytitle" />
+       <logger level="INFO" doc:name="Logger" doc:id="93117bf0-ba90-4f70-9262-3728a2c965b9" message="#[vars.readproductbytitle]"/>
+	   <choice doc:name="Choice" doc:id="efa7446e-684f-4bbc-8262-94af625f0355" >
+			<when expression="#[vars.readproductbytitle[0].title != payload.title]">
+				<logger level="INFO" doc:name="Logger" doc:id="3930936b-a10d-41fc-9dca-04fbc93e513c" message='#[output application/json --- {"message": "product fetch zero or multiple records"}]'/>
+				<raise-error doc:name="Raise error" doc:id="c8fba795-1e9f-474b-8054-ce200df2f483" type="APPERROR:PRODUCT TITLE SHOULD BE UNIQUE"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="d8c2eba6-58fa-4c57-8bc1-dfeb53803e4a" message='#[output application/json --- {"message": "product with title existsexits"}]'/>
+			</otherwise>
+		</choice>	
+		<flow-ref doc:name="updateproduct" doc:id="dd8bc1d6-f224-46f8-8e95-def814b44c1c" name="updateproduct" target="productdbresponse" />
+        <choice doc:name="Choice" doc:id="d2688a89-6c15-46c7-a646-0153522ca345" >
+			<when expression="#[vars.productdbresponse.affectedRows == 0]">
+				<logger level="INFO" doc:name="Logger" doc:id="57637c3d-680c-4367-b136-03904bc69367" message='#[output application/json --- {"message": "product doesnt exits"}]'/>
+				<raise-error doc:name="Raise error" doc:id="aab3243d-b3a1-4795-8f0b-a69856f06fea" type="APPERROR:NO_SUCH_CLIENT"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="3d7b3fcc-085e-4ae2-96d1-d2da6956f9bc" message='#[output application/json --- {"message": "product exits"}]'/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="d378377b-bc2b-40b0-9f4a-c4e18cac0733" message="#[output application/json --- vars.productdbresponse]" />
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  title: payload.title
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>

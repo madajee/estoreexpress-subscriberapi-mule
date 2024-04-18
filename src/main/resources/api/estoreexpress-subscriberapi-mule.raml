@@ -182,4 +182,22 @@ uses:
             type: object
             examples:
               example1: !include examples/deleteproduct/example.raml
+/updateproduct:
+  post:
+    description: updateproduct
+    body:
+        application/json:
+          type:  apiLib.updateproduct
+          example: |
+            {
+              "title": "iPhone X",
+              "brand": "Samsung"
+            }
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            examples:
+              example1: !include examples/deleteproduct/example.raml
 
