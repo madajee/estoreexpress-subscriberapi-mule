@@ -27,7 +27,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<db:update doc:name="Update" doc:id="9336bf24-9a41-4353-804c-c63080024992" config-ref="Database_Config">
 		<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:ESTOREAPI" />
 			<db:sql><![CDATA[${product.update}]]></db:sql>
-			<db:input-parameters><![CDATA[#[{'title': payload.title, 'brand': payload.brand, 'rating': vars.readproductbytitle[0].rating, updated_on: vars.updated_on}]]]></db:input-parameters>
+			<db:input-parameters><![CDATA[#[{'title': payload.title, 'brand': payload.brand, 'rating': vars.updatedproductfieldvalues.rating, 'description': vars.updatedproductfieldvalues.description, 'price': vars.updatedproductfieldvalues.price, 'discountPercentage': vars.updatedproductfieldvalues.discountPercentage, 'stock': vars.updatedproductfieldvalues.stock, 'brand': vars.updatedproductfieldvalues.brand, 'category': vars.updatedproductfieldvalues.category, 'thumbnail': vars.updatedproductfieldvalues.thumbnail, updated_on: vars.updated_on}]]]></db:input-parameters>
 		</db:update>
 	</sub-flow>
 	<sub-flow name="readproductbytitle" doc:id="bf93d8d6-7b95-4f62-ba1a-bfc5ecae88b0">

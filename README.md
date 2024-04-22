@@ -31,4 +31,36 @@ curl --location 'http://localhost:8081/api/testuserq' \
 --header 'Content-Type: application/json' \
 --data '{"msgtype":"login","message":{"username":"john","password":"test","lastlogin":"2017-01-01"}}'
 
+curl --location 'http://localhost:8081/api/createproduct' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title": "iPhone X",
+    "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+    "price": 899,
+    "discountPercentage": 12.96,
+    "rating": 4.69,
+    "stock": 94,
+    "brand": "Apple",
+    "category": "smartphones",
+    "thumbnail": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"
+}'
+
 curl --location 'http://localhost:8081/api/readproduct'
+
+curl --location 'http://localhost:8081/api/updateproduct' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title": "iPhone X",
+    "brand": "Apple",
+    "rating": 8,
+    "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+    "price": 899,
+    "stock": 99
+}'
+
+curl --location 'http://localhost:8081/api/deleteproduct' \
+--header 'Content-Type: application/json' \
+--data '{
+  "id": "13",
+  "title": "iPhone X"
+}'

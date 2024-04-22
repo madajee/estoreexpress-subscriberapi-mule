@@ -310,6 +310,33 @@ output application/json
 				<logger level="INFO" doc:name="Logger" doc:id="d8c2eba6-58fa-4c57-8bc1-dfeb53803e4a" message='#[output application/json --- {"message": "product with title existsexits"}]'/>
 			</otherwise>
 		</choice>	
+		<ee:transform doc:name="Transform Message" doc:id="ecf327fc-fb98-4bd5-96f0-f8cd186c42b1" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="updatedproductfieldvalues" ><![CDATA[%dw 2.0
+output application/java
+var recordrarting = vars.readproductbytitle[0].rating
+var recorddescription = vars.readproductbytitle[0].description
+var recordprice = vars.readproductbytitle[0].price
+var recorddiscountPercentage = vars.readproductbytitle[0].discountPercentage
+var recordstock = vars.readproductbytitle[0].stock
+var recordcategory = vars.readproductbytitle[0].category
+var recordthumbnail = vars.readproductbytitle[0].thumbnail
+
+---
+{
+	"rating": if ( payload.rating != null) payload.rating else recordrarting,
+	"description": if ( payload.description != null) payload.description else recorddescription,
+	"price": if ( payload.price != null) payload.price else recordprice,
+	"discountPercentage": if ( payload.discountPercentage != null) payload.discountPercentage else recorddiscountPercentage,
+	"stock": if ( payload.stock != null) payload.stock else recordstock,
+	"category": if ( payload.category != null) payload.category else recordcategory,
+	"thumbnail": if ( payload.thumbnail != null) payload.thumbnail else recordthumbnail		
+} ]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2063727e-3b76-4e2c-91d7-ef1c43b732ef" message="#[output application/json --- vars.updatedproductfieldvalues]"/>
 		<flow-ref doc:name="updateproduct" doc:id="dd8bc1d6-f224-46f8-8e95-def814b44c1c" name="updateproduct" target="productdbresponse" />
         <choice doc:name="Choice" doc:id="d2688a89-6c15-46c7-a646-0153522ca345" >
 			<when expression="#[vars.productdbresponse.affectedRows == 0]">
