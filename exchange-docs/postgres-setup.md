@@ -41,3 +41,23 @@ INSERT INTO products (title, description, price, discountPercentage, rating, sto
 select title, description, price, discountPercentage, rating, stock, brand, category, thumbnail, created_on, updated_on from products;
 
 DROP TABLE errors;
+
+DROP TABLE products;
+
+********************************************************************************
+
+DROP TABLE "products";
+DROP TABLE carts;
+DROP TABLE cartitems;
+
+\d+ users
+
+ CREATE TABLE IF NOT EXISTS "tutorials" ("id"   SERIAL , "title" VARCHAR(255), "description" VARCHAR(255), "published" BOOLEAN, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY ("id"));
+
+ CREATE TABLE IF NOT EXISTS "users" ("id"  SERIAL , "username" VARCHAR(255) NOT NULL UNIQUE, "password" VARCHAR(255) NOT NULL, "role" VARCHAR(255) NOT NULL DEFAULT 'user', "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY ("id"));
+
+ CREATE TABLE IF NOT EXISTS "carts" ("id"  SERIAL , "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, "userId" INTEGER REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE, PRIMARY KEY ("id"));
+
+ CREATE TABLE IF NOT EXISTS "products" ("id"  SERIAL , "name" VARCHAR(255) NOT NULL, "description" VARCHAR(255) NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY ("id"));
+
+ CREATE TABLE IF NOT EXISTS "cartitems" ("id"  SERIAL , "quantity" INTEGER, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL, "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL, "cartId" INTEGER REFERENCES "carts" ("id") ON DELETE CASCADE ON UPDATE CASCADE, "productId" INTEGER REFERENCES "products" ("id") ON DELETE CASCADE ON UPDATE CASCADE, UNIQUE ("cartId", "productId"), PRIMARY KEY ("id"));
