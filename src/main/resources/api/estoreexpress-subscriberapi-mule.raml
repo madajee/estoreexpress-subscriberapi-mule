@@ -200,4 +200,64 @@ uses:
             type: object
             examples:
               example1: !include examples/deleteproduct/example.raml
-
+/order:
+  post:
+    description: createorder
+    body:
+        application/json:
+          example: |
+            {
+              "ordertype": "WEB",
+              "servicetype": "Azure",
+              "odreritems" : [
+                {
+                  "productId": "1",
+                  "quantity": "1"
+                },
+                {
+                  "productId": "2",
+                  "quantity": "1"
+                },
+                {
+                  "productId": "3",
+                  "quantity": "1"
+                }                
+              ]
+            }
+    responses:
+      200:
+        body:
+          application/json:
+/readorders:
+  get:
+    description: readorder
+    responses:
+      200:
+        body:
+          application/json:
+            type: array
+            examples:
+/orderitem:
+  post:
+    description: createorderitem
+    body:
+        application/json:
+          example: |
+                [
+                  {
+                    "productId": "1",
+                    "quantity": "1"
+                  },
+                  {
+                    "productId": "2",
+                    "quantity": "1"
+                  },
+                  {
+                    "productId": "3",
+                    "quantity": "1"
+                  }                
+                ]
+    responses:
+      200:
+        body:
+          application/json:

@@ -64,3 +64,46 @@ curl --location 'http://localhost:8081/api/deleteproduct' \
   "id": "13",
   "title": "iPhone X"
 }'
+
+curl --location 'http://localhost:8081/api/order' \
+--header 'Content-Type: application/json' \
+--data '{
+    "ordertype": "WEB",
+    "servicetype": "Azure",
+    "userid" : "1",
+    "odreritems": [
+        {
+            "productId": "1",
+            "quantity": "1"
+        },
+        {
+            "productId": "2",
+            "quantity": "1"
+        },
+        {
+            "productId": "3",
+            "quantity": "1"
+        }
+    ]
+}'
+
+curl --location 'http://localhost:8081/api/readorders'
+
+curl --location 'http://localhost:8081/api/orderitem' \
+--header 'Content-Type: application/json' \
+--data '[
+    {
+        "orderid": 1,
+        "productid": 1,
+        "quantity": 1
+    },
+    {
+        "orderid": "1",
+        "productid": "2",
+        "quantity": "1"
+    },
+    {
+        "productId": "3",
+        "quantity": "1"
+    }
+]'

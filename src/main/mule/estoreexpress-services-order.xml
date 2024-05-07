@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<sub-flow name="readorders" doc:id="6417bae0-be8a-4e98-ac3d-675f853c8021">
+		<db:select doc:name="Select" doc:id="3641bc0e-b09e-46e4-bf28-0c443072f22a" config-ref="Database_Config">
+			<db:sql ><![CDATA[${order.select}]]></db:sql>
+		</db:select>
+	</sub-flow>
+	<sub-flow name="insertorder" doc:id="a7b67c3a-adc0-43da-9172-f36d1b96627f" >
+		<db:insert doc:name="Insert" doc:id="d6835289-d44b-403a-98a3-43b93a397fda" config-ref="Database_Config">
+			<db:sql ><![CDATA[${order.insert}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'ordertype': payload.ordertype, 'servicetype': payload.servicetype, 'startdate': vars.auditfield.created_on, 'enddate': vars.auditfield.created_on, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on, 'userid': payload.userid}]]]></db:input-parameters>
+		</db:insert>
+	</sub-flow>
+	<sub-flow name="insertorderitem" doc:id="2f15b982-d565-4f59-8dcb-3cce9931d95b" >
+		<db:insert doc:name="Insert" doc:id="acadaa58-9d07-4fe3-a998-febd29fe6690" config-ref="Database_Config">
+			<db:sql ><![CDATA[${orderitems.insert}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'orderid': payload[0].orderid, 'productid': payload[0].productid, 'quantity': payload[0].quantity, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
+		</db:insert>
+
+	</sub-flow>
+</mule>
