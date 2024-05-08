@@ -49,4 +49,10 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<db:input-parameters ><![CDATA[#[{'orderidentifier': vars.orderidentifier}]]]></db:input-parameters>
 		</db:delete>
 	</sub-flow>
+	<sub-flow name="destroyorderitems" doc:id="12573358-d3fc-454a-bd0f-6bde3fec60f3" >
+		<db:delete doc:name="Delete" doc:id="ef8f9a6e-bf87-428f-8cc2-52a9e607a895" config-ref="Database_Config">
+			<db:sql ><![CDATA[${orderitems.delete}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'orderid': vars.orderid}]]]></db:input-parameters>
+		</db:delete>
+	</sub-flow>
 </mule>
