@@ -111,3 +111,9 @@ curl --location 'http://localhost:8081/api/orderstatus' \
     "orderidentifier": "4fcffb3c-0d8d-4892-9a7b-2b81402de061",
     "status": "complete"
 }'
+
+curl --location 'http://localhost:8081/api/orderdestroy' \
+--header 'Content-Type: application/json' \
+--data '{
+    "orderidentifier": "545087ed-b872-46ac-9d6a-0aa0fdd0426d"
+}'

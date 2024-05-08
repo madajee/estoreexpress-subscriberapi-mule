@@ -374,52 +374,7 @@ output application/json
 			</ee:variables>
 		</ee:transform>
 		<set-variable value="#[uuid()]" doc:name="uuid" doc:id="6f860885-53ff-49ff-ae0f-ec0ddbc57e8b" variableName="orderidentifier"/>
-		<flow-ref doc:name="createorder" doc:id="8cfde509-ca72-4584-8291-ab990d86d6e9" name="insertorder" target="ordersdbresponse" />
-		<flow-ref doc:name="retrieveorderbyorderidentifier" doc:id="33cc47fe-9065-474c-814f-bf03a3deea1c" name="retrieveorderbyorderidentifier" target="orderbyidentiferresponse" />
-		<choice doc:name="Choice" doc:id="c4083eea-7e72-4d31-a111-44cc03a64fbb" >
-			<when expression="#[sizeOf(vars.orderbyidentiferresponse) == 1]">
-		<ee:transform doc:name="Transform Message" doc:id="81ea3181-d8ba-4b9f-b024-74365dd2eb54" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-payload.orderitems map() -> {
- "orderid": vars.orderbyidentiferresponse[0].id,
- "productid": $.productId,
- "quantity": $.quantity,
- "created_on": vars.auditfield.created_on,
- "updated_on": vars.auditfield.updated_on
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="951ba17d-1a59-446f-931f-96b209082b0a" message="#[output application/json --- payload]"/>
-		<flow-ref doc:name="bulk-insert-orderitem" doc:id="cfdb158a-2fa4-4af8-8f4e-1f309b2bfedb" name="bulk-insert-orderitem" target="orderitemdbresponse" />
-			<ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  "message": "order created sucessfully",
-  "orderidentifier": vars.orderidentifier,
-  payload: vars.ordersdbresponse,
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-           </ee:transform>
-			</when>
-			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="3133ed04-d48c-41f6-9702-34d75499cf57" >
-					<ee:message >
-						 <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  "message": "order not created"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</otherwise>
-		</choice>
+		<flow-ref doc:name="create-order-transactional" doc:id="a2e0c23a-1726-4c5a-b7b7-6e6b4910b1d1" name="create-order-transactional"/>
 		<logger level="INFO" doc:name="Logger" doc:id="a2ca0322-26ef-40a7-955a-11495e12dc33" message="#[output application/json --- vars.auditfield]"/>
 		<logger level="INFO" doc:name="Logger" doc:id="5094fcbf-5a1c-4837-a254-715657e68754" message="#[output application/json --- payload]"/>
     </flow>

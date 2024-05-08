@@ -55,4 +55,68 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<db:input-parameters ><![CDATA[#[{'orderid': vars.orderid}]]]></db:input-parameters>
 		</db:delete>
 	</sub-flow>
+	<sub-flow name="create-order-transactional" doc:id="28796d74-f087-4ec0-9700-5b0016bf36e2">
+				<try doc:name="Try" doc:id="cbc04f09-5e59-4ae3-a2ef-6f370e4517cf" transactionalAction="BEGIN_OR_JOIN">
+			<flow-ref doc:name="createorder" doc:id="8c853c51-a2bd-4d3a-ab6c-37f23d7863e2" name="insertorder" target="ordersdbresponse" />
+			<flow-ref doc:name="retrieveorderbyorderidentifier" doc:id="a3920dfd-0589-4177-8ff5-ad49d94b6592" name="retrieveorderbyorderidentifier" target="orderbyidentiferresponse" />
+			<choice doc:name="Choice" doc:id="0cb215ed-50a2-4a32-8d32-36fb641081e1">
+			<when expression="#[sizeOf(vars.orderbyidentiferresponse) == 1]">
+		<ee:transform doc:name="Transform Message" doc:id="f44746ae-be22-4f2e-b1e1-5288a5200397">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload.orderitems map() -> {
+ "orderid": vars.orderbyidentiferresponse[0].id,
+ "productid": $.productId,
+ "quantity": $.quantity,
+ "created_on": vars.auditfield.created_on,
+ "updated_on": vars.auditfield.updated_on
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="806ecf39-8fcb-4095-b93f-278783333394" message="#[output application/json --- payload]" />
+				<flow-ref doc:name="bulk-insert-orderitem" doc:id="6706adb0-d705-4c60-8537-2bb4fb0d8835" name="bulk-insert-orderitem" target="orderitemdbresponse" />
+				<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "message": "order created sucessfully",
+  "orderidentifier": vars.orderidentifier,
+  payload: vars.ordersdbresponse,
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+           </ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transform Message" doc:id="454dadab-5028-46ce-9060-103932d59be3">
+					<ee:message>
+						 <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "message": "order not created"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="1d2141d2-67ca-4560-a0ee-f7dc11e2e0cf" >
+					<ee:transform doc:name="Transform Message" doc:id="8424d50e-276a-4175-a110-0c55a8c1036e" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Error Occured while persiting an order and orderitems, order is not created."
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
+	</sub-flow>
 </mule>
