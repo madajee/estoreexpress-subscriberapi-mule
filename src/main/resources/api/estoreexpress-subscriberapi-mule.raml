@@ -275,3 +275,16 @@ uses:
       200:
         body:
           application/json:
+/orderdestroy:
+  post:
+    description: destroyorder
+    body:
+        application/json:
+          example: |
+            {
+              "orderidentifier": "4fcffb3c-0d8d-4892-9a7b-2b81402de061"
+            }
+    responses:
+      200:
+        body:
+          application/json:

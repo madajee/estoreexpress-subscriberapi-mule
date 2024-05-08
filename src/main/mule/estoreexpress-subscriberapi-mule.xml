@@ -383,7 +383,8 @@ output application/json
 output application/json
 ---
 {
-  payload: vars.ordersdbresponse
+  orderidentifier: vars.orderidentifier,
+  payload: vars.ordersdbresponse,
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -461,6 +462,7 @@ output application/json
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<set-variable value="#[payload.orderidentifier]" doc:name="orderidentifier" doc:id="b753bfd7-3874-4f7b-a56c-507c890c747a" variableName="orderidentifier"/>
 		<flow-ref doc:name="retrieveorderbyorderidentifier" doc:id="abeb2b21-26b3-42ea-9852-9a552ced0717" name="retrieveorderbyorderidentifier" target="orderbyidentiferresponse" />
 		<choice doc:name="Choice" doc:id="c49c2007-c145-4ab3-be18-b6322df43d4f" >
 			<when expression="#[sizeOf(vars.orderbyidentiferresponse) == 1]">
@@ -479,6 +481,51 @@ output application/json
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Transform Message" doc:id="f573bd04-50e0-45b1-8ba6-1f0ac3ecea2b" >
+					<ee:message >
+						 <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "order doesnot exist"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
+ <flow name="post:\orderdestroy:application\json:estoreexpress-subscriberapi-mule-config">
+		<ee:transform doc:name="auditfields" doc:id="4c90ed44-54da-4525-ba27-1cdc34dcedd0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="auditfield" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	created_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"},
+	updated_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value="#[payload.orderidentifier]" doc:name="orderidentifier" doc:id="357c8e71-50fd-40e6-b659-1135548218f1" variableName="orderidentifier"/>
+		<flow-ref doc:name="retrieveorderbyorderidentifier" doc:id="9483b888-1ea1-436b-ac32-893f7b29b31d" name="retrieveorderbyorderidentifier" target="orderbyidentiferresponse" />
+		<choice doc:name="Choice" doc:id="678882ed-c5f2-4f1d-a73d-0f50ca919bd4" >
+			<when expression="#[sizeOf(vars.orderbyidentiferresponse) == 1]">
+			<flow-ref doc:name="destroyorder" doc:id="37e49d91-e591-4b9d-b84b-b0ae6f95e4ce" name="destroyorder" target="destroyorderresponse" />
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "order destroyed successfully",
+  payload: vars.destroyorderresponse
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="c7901fcd-aaa9-4ed0-8a83-b3a60181b38b" >
 					<ee:message >
 						 <ee:set-payload><![CDATA[%dw 2.0
 output application/json

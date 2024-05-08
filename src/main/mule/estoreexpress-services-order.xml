@@ -33,14 +33,20 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<sub-flow name="retrieveorderbyorderidentifier" doc:id="92637b82-3ac5-4a4e-a331-8c4c4988fedd">
 		<db:select doc:name="Select" doc:id="3a22461c-f6cc-4b0a-8716-7542060487b9" config-ref="Database_Config">
 			<db:sql ><![CDATA[${order.selectbyorderidentifier}]]></db:sql>
-			<db:input-parameters ><![CDATA[#[{'orderidentifier': payload.orderidentifier}]]]></db:input-parameters>
+			<db:input-parameters ><![CDATA[#[{'orderidentifier': vars.orderidentifier}]]]></db:input-parameters>
 		</db:select>
 	</sub-flow>
 	<sub-flow name="updateorderstatus" doc:id="94cc67b9-b638-4cc4-80c7-651ec5a8d197" >
 		<db:update doc:name="Update" doc:id="9b8a982f-4771-483e-9520-db9e320a75f4" config-ref="Database_Config">
 		<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:ESTOREAPI" />
 			<db:sql><![CDATA[${order.updatestatus}]]></db:sql>
-			<db:input-parameters><![CDATA[#[{'status': payload.status, 'orderidentifier': payload.orderidentifier, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
+			<db:input-parameters><![CDATA[#[{'status': payload.status, 'orderidentifier': vars.orderidentifier, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
 		</db:update>
+	</sub-flow>
+	<sub-flow name="destroyorder" doc:id="85550db0-b8af-4440-aaec-d79de6555412" >
+		<db:delete doc:name="Delete" doc:id="1ab1d39b-0a2e-4674-88e5-42215a372d34" config-ref="Database_Config">
+			<db:sql ><![CDATA[${order.deletebyorderidentifier}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'orderidentifier': vars.orderidentifier}]]]></db:input-parameters>
+		</db:delete>
 	</sub-flow>
 </mule>
