@@ -261,3 +261,17 @@ uses:
       200:
         body:
           application/json:
+/orderstatus:
+  post:
+    description: updateorderstatus
+    body:
+        application/json:
+          example: |
+            {
+              "orderidentifier": "4fcffb3c-0d8d-4892-9a7b-2b81402de061",
+              "status": "complete"
+            }
+    responses:
+      200:
+        body:
+          application/json:

@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<sub-flow name="insertorder" doc:id="a7b67c3a-adc0-43da-9172-f36d1b96627f" >
 		<db:insert doc:name="Insert" doc:id="d6835289-d44b-403a-98a3-43b93a397fda" config-ref="Database_Config">
 			<db:sql ><![CDATA[${order.insert}]]></db:sql>
-			<db:input-parameters ><![CDATA[#[{'ordertype': payload.ordertype, 'servicetype': payload.servicetype, 'startdate': vars.auditfield.created_on, 'enddate': vars.auditfield.created_on, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on, 'userid': payload.userid}]]]></db:input-parameters>
+			<db:input-parameters ><![CDATA[#[{'orderidentifier': vars.orderidentifier, 'customername': payload.customername, 'ordertype': payload.ordertype, 'servicetype': payload.servicetype, 'status': 'pending', 'startdate': vars.auditfield.created_on, 'enddate': vars.auditfield.created_on, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on, 'userid': payload.userid}]]]></db:input-parameters>
 		</db:insert>
 	</sub-flow>
 	<sub-flow name="insertorderitem" doc:id="2f15b982-d565-4f59-8dcb-3cce9931d95b" >
@@ -24,5 +24,23 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<db:input-parameters ><![CDATA[#[{'orderid': payload[0].orderid, 'productid': payload[0].productid, 'quantity': payload[0].quantity, 'created_on': vars.auditfield.created_on, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
 		</db:insert>
 
+	</sub-flow>
+	<sub-flow name="bulk-insert-orderitem" doc:id="9853d374-cb4f-4194-ac37-98c33b45b675" >
+		<db:bulk-insert doc:name="Bulk insert" doc:id="257a8af4-fd53-489a-ae41-56e1b8305919" config-ref="Database_Config">
+			<db:sql ><![CDATA[${orderitems.insert}]]></db:sql>
+		</db:bulk-insert>
+	</sub-flow>
+	<sub-flow name="retrieveorderbyorderidentifier" doc:id="92637b82-3ac5-4a4e-a331-8c4c4988fedd">
+		<db:select doc:name="Select" doc:id="3a22461c-f6cc-4b0a-8716-7542060487b9" config-ref="Database_Config">
+			<db:sql ><![CDATA[${order.selectbyorderidentifier}]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'orderidentifier': payload.orderidentifier}]]]></db:input-parameters>
+		</db:select>
+	</sub-flow>
+	<sub-flow name="updateorderstatus" doc:id="94cc67b9-b638-4cc4-80c7-651ec5a8d197" >
+		<db:update doc:name="Update" doc:id="9b8a982f-4771-483e-9520-db9e320a75f4" config-ref="Database_Config">
+		<error-mapping sourceType="DB:CONNECTIVITY" targetType="APP:ESTOREAPI" />
+			<db:sql><![CDATA[${order.updatestatus}]]></db:sql>
+			<db:input-parameters><![CDATA[#[{'status': payload.status, 'orderidentifier': payload.orderidentifier, 'updated_on': vars.auditfield.updated_on}]]]></db:input-parameters>
+		</db:update>
 	</sub-flow>
 </mule>

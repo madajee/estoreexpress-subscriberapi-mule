@@ -68,6 +68,7 @@ curl --location 'http://localhost:8081/api/deleteproduct' \
 curl --location 'http://localhost:8081/api/order' \
 --header 'Content-Type: application/json' \
 --data '{
+    "customername": "John Doe",
     "ordertype": "WEB",
     "servicetype": "Azure",
     "userid" : "1",
@@ -98,12 +99,15 @@ curl --location 'http://localhost:8081/api/orderitem' \
         "quantity": 1
     },
     {
-        "orderid": "1",
-        "productid": "2",
-        "quantity": "1"
-    },
-    {
-        "productId": "3",
-        "quantity": "1"
+        "orderid": 1,
+        "productid": 2,
+        "quantity": 1
     }
 ]'
+
+curl --location 'http://localhost:8081/api/orderstatus' \
+--header 'Content-Type: application/json' \
+--data '{
+    "orderidentifier": "4fcffb3c-0d8d-4892-9a7b-2b81402de061",
+    "status": "complete"
+}'

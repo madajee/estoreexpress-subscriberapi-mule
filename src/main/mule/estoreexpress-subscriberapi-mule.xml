@@ -373,6 +373,7 @@ output application/json
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<set-variable value="#[uuid()]" doc:name="uuid" doc:id="6f860885-53ff-49ff-ae0f-ec0ddbc57e8b" variableName="orderidentifier"/>
 		<flow-ref doc:name="createorder" doc:id="8cfde509-ca72-4584-8291-ab990d86d6e9" name="insertorder" target="ordersdbresponse" />
 		<logger level="INFO" doc:name="Logger" doc:id="a2ca0322-26ef-40a7-955a-11495e12dc33" message="#[output application/json --- vars.auditfield]"/>
 		<logger level="INFO" doc:name="Logger" doc:id="5094fcbf-5a1c-4837-a254-715657e68754" message="#[output application/json --- payload]"/>
@@ -416,7 +417,22 @@ output application/json
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="insertorderitem" doc:id="d3f81f7e-7178-482d-86b6-0484ea696a9a" name="insertorderitem" target="orderitemdbresponse" />
+		<!-- <flow-ref doc:name="insertorderitem" doc:id="d3f81f7e-7178-482d-86b6-0484ea696a9a" name="insertorderitem" target="orderitemdbresponse" /> -->
+		<ee:transform doc:name="Transform Message" doc:id="d5126962-32b0-4bbb-9d07-ae8ed02bb570" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map() -> {
+ "orderid": $.orderid,
+ "productid": $.productid,
+ "quantity": $.quantity,
+ "created_on": vars.auditfield.created_on,
+ "updated_on": vars.auditfield.updated_on
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="bulk-insert-orderitem" doc:id="a0b09c9d-9d77-4eff-aca0-9f1b88afc26d" name="bulk-insert-orderitem" target="orderitemdbresponse" />
 		<logger level="INFO" doc:name="Logger" doc:id="5d35594a-17aa-455c-be2c-f641dd3e0fc8" message="#[output application/json --- vars.auditfield]"/>
 		<logger level="INFO" doc:name="Logger" doc:id="b38bbf1a-6648-4e8b-9c32-98b0f987aecb" message="#[output application/json --- payload]"/>
 		<ee:transform doc:name="Transform Message">
@@ -430,5 +446,49 @@ output application/json
 } as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-    </flow> 
+    </flow>
+ <flow name="post:\orderstatus:application\json:estoreexpress-subscriberapi-mule-config">
+		<ee:transform doc:name="auditfields" doc:id="3762175e-e9b2-4180-b0ab-0c1e30656ad4" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="auditfield" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	created_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"},
+	updated_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="retrieveorderbyorderidentifier" doc:id="abeb2b21-26b3-42ea-9852-9a552ced0717" name="retrieveorderbyorderidentifier" target="orderbyidentiferresponse" />
+		<choice doc:name="Choice" doc:id="c49c2007-c145-4ab3-be18-b6322df43d4f" >
+			<when expression="#[sizeOf(vars.orderbyidentiferresponse) == 1]">
+			<flow-ref doc:name="updateorderstatus" doc:id="1f44e624-1441-4b8f-a4bb-41d36b266707" name="updateorderstatus" target="updateorderstatusresponse" />
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "order status updated successfully",
+  payload: vars.updateorderstatusresponse
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="f573bd04-50e0-45b1-8ba6-1f0ac3ecea2b" >
+					<ee:message >
+						 <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "order doesnot exist"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+    </flow>
 </mule>
