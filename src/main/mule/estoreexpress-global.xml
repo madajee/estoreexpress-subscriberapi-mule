@@ -23,10 +23,15 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="c7fa1728-f470-4c68-8f64-9f907f4113ce" >
 		<db:generic-connection url="jdbc:postgresql://localhost:5432/estoreexpressmule" driverClassName="org.postgresql.Driver" user="mulejohn" password="${db.pwd}"/>
 	</db:config>
-		<vm:config name="VM_Config" doc:name="VM Config" doc:id="08b4ec90-7851-43fb-973a-77d49d9b0256" >
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="08b4ec90-7851-43fb-973a-77d49d9b0256" >
 		<vm:queues >
 			<vm:queue queueName="userq" />
 			<vm:queue queueName="errorq" />
+		</vm:queues>
+	</vm:config>
+	<vm:config name="VM_Config_orderq" doc:name="VM Config" doc:id="920d6222-57de-47cc-9d2c-997cebe8db4a" >
+		<vm:queues >
+			<vm:queue queueName="orderq" queueType="PERSISTENT"/>
 		</vm:queues>
 	</vm:config>
 	<configuration doc:name="Configuration" doc:id="72b70f13-3221-4ccd-9ac6-41e657994e49" defaultErrorHandler-ref="commonErrorHandler" />

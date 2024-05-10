@@ -47,4 +47,41 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<sub-flow name="estoreexpresstest-userq-publishvmsubFlow" doc:id="3983f745-2971-4e44-8d71-66faec21a878" >
 		<vm:publish queueName="userq" doc:name="Publish" doc:id="58dbdfe9-c7b9-4d6d-bb48-bc59de8079e3" config-ref="VM_Config"/>
 	</sub-flow>
+		<sub-flow name="orderq-publishvmsubFlow" doc:id="2e63beed-b7f3-457b-b146-c6597a6eb53c" >
+		<vm:publish queueName="orderq" doc:name="Publish" doc:id="965d9cc5-e837-4252-bc9b-56c837107086" config-ref="VM_Config_orderq"/>
+	</sub-flow>
+	<flow name="subscriber-orderqFlow" doc:id="2f13a798-ac6e-4b6e-8c03-3670c4744160" initialState="started">
+		<vm:listener doc:name="Listener" doc:id="d9c2a561-481e-4281-a286-45b348b98b08" config-ref="VM_Config_orderq" queueName="orderq"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b2ac2c73-6951-4129-9822-76992a1df265" message="#[output application/json --- payload]"/>
+		<choice doc:name="Choice" doc:id="86e3f6a5-eb72-48ec-b35c-415f07dd5ff9" >
+			<when expression="#[payload.msgtype == 'createorder']">
+				<ee:transform doc:name="Transform Message" doc:id="855fab5d-369c-43be-ae04-7d206e58aa0c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.message]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+<ee:transform doc:name="auditfields" doc:id="9b50bb49-619f-4320-96db-fff535349ba7" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="auditfield" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	created_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"},
+	updated_on: now() as Date {format: "yyyy-MM-dd"} as String {format: "yyyy-MM-dd"}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+				<set-variable value="#[uuid()]" doc:name="uuid" doc:id="fd8cf347-2d76-4ae5-8e52-62713b881e03" variableName="orderidentifier"/>
+				<flow-ref doc:name="create-order-transactional" doc:id="0f1be000-7715-4d59-b9d3-d9fc853bdbcb" name="create-order-transactional"/>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger" doc:id="bdb00884-8d9e-4f4e-bfb2-12dde6fc3f3e" message="#[output application/json --- payload]"/>
+			</otherwise>
+		</choice>
+	</flow>
 </mule>

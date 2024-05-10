@@ -288,3 +288,32 @@ uses:
       200:
         body:
           application/json:
+/testorderq:
+  post:
+    description: orderuserq
+    body:
+        application/json:
+          example: |
+            {
+              "msgtype": "createorder",
+              "message": {
+                  "customername": "John Doe",
+                  "ordertype": "WEB",
+                  "servicetype": "Azure",
+                  "userid": "1",
+                  "orderitems": [
+                      {
+                          "productId": "1",
+                          "quantity": "1"
+                      },
+                      {
+                          "productId": "2",
+                          "quantity": "1"
+                      }
+                  ]
+                }
+            }
+    responses:
+      200:
+        body:
+          application/json:

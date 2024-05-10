@@ -529,4 +529,20 @@ output application/json
 			</otherwise>
 		</choice>
     </flow>
+   <flow name="post:\testorderq:application\json:estoreexpress-subscriberapi-mule-config">
+        <async doc:name="Async" doc:id="839e094c-1a68-48e9-9b02-e976926c1904" >
+			<flow-ref doc:name="orderq-publishvmsubFlow" doc:id="c1970fa2-3c18-4943-9506-c53ff3c6d403" name="orderq-publishvmsubFlow" />
+		</async>
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  msgtype: "createorder",
+  message: "message published to orderq"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
 </mule>
